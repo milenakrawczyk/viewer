@@ -12,6 +12,7 @@ import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import RenameModal from "../components/Editor/RenameModal";
 import OpenModal from "../components/Editor/OpenModal";
 import { useAccountId } from "../data/account";
+import { SaveDraftModal } from "../components/SaveDraft";
 
 const StorageDomain = {
   page: "editor",
@@ -56,6 +57,7 @@ export default function EditorPage(props) {
   const [lastPath, setLastPath] = useState(undefined);
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showOpenModal, setShowOpenModal] = useState(false);
+  const [showSaveDraftModal, setShowSaveDraftModal] = useState(false);
 
   const [renderCode, setRenderCode] = useState(code);
   const [widgetProps, setWidgetProps] = useState(
@@ -341,9 +343,9 @@ export default function EditorPage(props) {
 
   const widgetName = path?.name;
 
-  const commitButton = (
+  const publishButton = (
     <CommitButton
-      className="btn btn-primary"
+      className="btn btn-danger"
       disabled={!widgetName}
       near={near}
       data={{
@@ -355,8 +357,18 @@ export default function EditorPage(props) {
         },
       }}
     >
-      Save Widget
+      Publish Widget
     </CommitButton>
+  );
+
+  const saveDraftButton = (
+    <button
+      className="btn btn-primary"
+      disabled={!widgetName}
+      onClick={() => setShowSaveDraftModal(true)}
+    >
+      Save Draft
+    </button>
   );
 
   const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
@@ -380,6 +392,14 @@ export default function EditorPage(props) {
             : createFile(Filetype.Widget)
         }
         onHide={() => setShowOpenModal(false)}
+      />
+      <SaveDraftModal
+        show={showSaveDraftModal}
+        onHide={() => setShowSaveDraftModal(false)}
+        near={near}
+        widgetPath={widgetPath}
+        widgetName={widgetName}
+        code={code}
       />
       <div className="mb-3">
         <Nav
@@ -576,7 +596,8 @@ export default function EditorPage(props) {
                   >
                     Render preview
                   </button>
-                  {!path?.unnamed && commitButton}
+                  {!path?.unnamed && saveDraftButton}
+                  {!path?.unnamed && publishButton}
                   <button
                     className={`btn ${
                       path?.unnamed ? "btn-primary" : "btn-secondary"
@@ -636,7 +657,7 @@ export default function EditorPage(props) {
                     )}
                   />
                 </div>
-                <div className="mb-3">{commitButton}</div>
+                <div className="mb-3">{publishButton}</div>
               </div>
             </div>
             <div
