@@ -371,6 +371,9 @@ export default function EditorPage(props) {
   const widgetName = path?.name.split("/")[0];
   const widgetPathName = path?.name;
   const isDraft = path?.name.split("/")[2] === "draft";
+
+  const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
+  const jpath = JSON.stringify(path);
   const createOpenDraftButton = (
     <button
       className="btn btn-primary"
@@ -458,9 +461,6 @@ export default function EditorPage(props) {
       Open Component in a new tab
     </a>
   );
-
-  const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
-  const jpath = JSON.stringify(path);
 
   return (
     <div className="container-fluid mt-1">
