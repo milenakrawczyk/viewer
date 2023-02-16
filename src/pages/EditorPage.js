@@ -393,16 +393,17 @@ export default function EditorPage(props) {
     </CommitButton>
   );
 
-  const saveDraftButton = (
+  const renderPreviewButton = (
     <button
-      className="btn btn-primary"
-      disabled={!widgetName}
-      onClick={(e) => {
-        e.preventDefault();
-        setShowSaveDraftModal(true)}
-      }
+      className="btn btn-success"
+      onClick={() => {
+        setRenderCode(code);
+        if (layout === Layout.Tabs) {
+          setTab(Tab.Widget);
+        }
+      }}
     >
-      Save Draft
+      Render preview
     </button>
   );
 
