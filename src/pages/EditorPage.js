@@ -192,6 +192,33 @@ export default function EditorPage(props) {
     return { type, name };
   }, []);
 
+  const openDraft = useCallback(
+    (widgetName) => {
+      if (!near) {
+        return;
+      }
+      const widgetSrc = `${accountId}/widget/${widgetName}/branch/draft`;
+
+      const c = () => {
+        const code = cache.socialGet(
+          near,
+          widgetSrc,
+          false,
+          undefined,
+          undefined,
+          c
+        );
+        if (code) {
+          const name = widgetSrc.split("/").slice(2).join("/");
+          openFile(toPath(Filetype.Widget, widgetSrc), code);
+        }
+      };
+
+      c();
+    },
+    [accountId, openFile, toPath, near, cache]
+  );
+
   const loadFile = useCallback(
     (nameOrPath) => {
       if (!near) {
