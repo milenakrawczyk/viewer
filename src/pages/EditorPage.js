@@ -407,6 +407,17 @@ export default function EditorPage(props) {
     </button>
   );
 
+  const renameButton = (
+    <button
+      className={`btn ${path?.unnamed ? "btn-primary" : "btn-secondary"}`}
+      onClick={() => {
+        setShowRenameModal(true);
+      }}
+    >
+      Rename {path?.type}
+    </button>
+  );
+
   const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
   const jpath = JSON.stringify(path);
 
