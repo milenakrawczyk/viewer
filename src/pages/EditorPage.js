@@ -418,6 +418,17 @@ export default function EditorPage(props) {
     </button>
   );
 
+  const openInNewTabButton = (
+    <a
+      className="btn btn-outline-primary"
+      href={`#/${widgetPath}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Open Component in a new tab
+    </a>
+  );
+
   const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
   const jpath = JSON.stringify(path);
 
