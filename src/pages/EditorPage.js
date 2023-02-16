@@ -341,7 +341,15 @@ export default function EditorPage(props) {
     [setLayout, tab, setTab]
   );
 
-  const widgetName = path?.name;
+  const createOpenDraftButton = (
+    <button
+      className="btn btn-primary"
+      // disabled={!widgetName}
+      onClick={(e) => {}}
+    >
+      {true ? "Open a Draft" : "Create a Draft"}
+    </button>
+  );
 
   const publishButton = (
     <CommitButton
