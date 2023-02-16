@@ -369,6 +369,8 @@ export default function EditorPage(props) {
   );
 
   const widgetName = path?.name.split("/")[0];
+  const widgetPathName = path?.name;
+  const isDraft = path?.name.split("/")[2] === "draft";
   const createOpenDraftButton = (
     <button
       className="btn btn-primary"
