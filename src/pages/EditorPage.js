@@ -498,6 +498,9 @@ export default function EditorPage(props) {
         >
           {files?.map((p, idx) => {
             const jp = JSON.stringify(p);
+            const widgetName = p.name.split("/")[0];
+            const isDraft = p.name.split("/")[2] === "draft";
+
             return (
               <Nav.Item key={jp}>
                 <Nav.Link className="text-decoration-none" eventKey={jp}>
