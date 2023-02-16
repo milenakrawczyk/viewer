@@ -549,14 +549,7 @@ export default function EditorPage(props) {
               </Nav.Item>
             );
           })}
-          <Nav.Item>
-            <Nav.Link
-              className="text-decoration-none"
-              onClick={() => setShowOpenModal(true)}
-            >
-              <i className="bi bi-file-earmark-plus"></i> Add
-            </Nav.Link>
-          </Nav.Item>
+          <Nav.Item className="">{openCreateButton}</Nav.Item>
         </Nav>
         {NearConfig.widgets.editorComponentSearch && (
           <div>
