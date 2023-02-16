@@ -449,7 +449,7 @@ export default function EditorPage(props) {
 
   const renameButton = (
     <button
-      className={`btn ${path?.unnamed ? "btn-primary" : "btn-secondary"}`}
+      className="btn btn-secondary"
       onClick={() => {
         setShowRenameModal(true);
       }}
@@ -555,8 +555,8 @@ export default function EditorPage(props) {
               </Nav.Item>
             );
           })}
-          <Nav.Item className="ms-auto me-1">{renameButton}</Nav.Item>
-          <Nav.Item className="">{openCreateButton}</Nav.Item>
+          <Nav.Item className="ms-auto me-1">{openCreateButton}</Nav.Item>
+          {isDraft || <Nav.Item>{renameButton}</Nav.Item>}
         </Nav>
         {NearConfig.widgets.editorComponentSearch && (
           <div>
