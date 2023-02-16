@@ -643,39 +643,12 @@ export default function EditorPage(props) {
                   />
                 </div>
                 <div className="mb-3 d-flex gap-2 flex-wrap">
-                  <button
-                    className="btn btn-success"
-                    onClick={() => {
-                      setRenderCode(code);
-                      if (layout === Layout.Tabs) {
-                        setTab(Tab.Widget);
-                      }
-                    }}
-                  >
-                    Render preview
-                  </button>
-                  {!path?.unnamed && saveDraftButton}
+                  {renderPreviewButton}
+                  {createOpenDraftButton}
                   {!path?.unnamed && publishButton}
-                  <button
-                    className={`btn ${
-                      path?.unnamed ? "btn-primary" : "btn-secondary"
-                    }`}
-                    onClick={() => {
-                      setShowRenameModal(true);
-                    }}
-                  >
-                    Rename {path?.type}
-                  </button>
-                  {path && accountId && (
-                    <a
-                      className="btn btn-outline-primary"
-                      href={`#/${widgetPath}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Open Component in a new tab
-                    </a>
-                  )}
+                  {saveLocallyButton}
+                  {renameButton}
+                  {path && accountId && openInNewTabButton}
                 </div>
               </div>
               <div className={`${tab === Tab.Props ? "" : "visually-hidden"}`}>
