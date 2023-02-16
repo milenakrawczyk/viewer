@@ -208,10 +208,7 @@ export default function EditorPage(props) {
           undefined,
           c
         );
-        if (code) {
-          const name = widgetSrc.split("/").slice(2).join("/");
-          openFile(toPath(Filetype.Widget, widgetSrc), code);
-        }
+        openFile(toPath(Filetype.Widget, widgetSrc), code || DefaultEditorCode);
       };
 
       c();
