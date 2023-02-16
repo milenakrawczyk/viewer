@@ -698,19 +698,15 @@ export default function EditorPage(props) {
                 <div className="mb-3 d-flex gap-2 flex-wrap">
                   {isDraft ? (
                     <>
-                      {renderPreviewButton}
                       {saveDraftButton}
                       {saveLocallyButton}
-                      {renameButton}
                       {path && accountId && openInNewTabButton}
                     </>
                   ) : (
                     <>
-                      {renderPreviewButton}
-                      {createOpenDraftButton}
                       {!path?.unnamed && publishButton}
                       {saveLocallyButton}
-                      {renameButton}
+                      {createOpenDraftButton}
                       {path && accountId && openInNewTabButton}
                     </>
                   )}
