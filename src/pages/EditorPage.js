@@ -503,8 +503,27 @@ export default function EditorPage(props) {
 
             return (
               <Nav.Item key={jp}>
-                <Nav.Link className="text-decoration-none" eventKey={jp}>
-                  {p.name}
+                <Nav.Link
+                  className="text-decoration-none"
+                  style={{ display: "flex" }}
+                  eventKey={jp}
+                >
+                  <div style={{ display: "flex" }}>
+                    <div>{widgetName}</div>
+                    {isDraft && (
+                      <div
+                        style={{
+                          padding: "0 12px",
+                          background: "yellow",
+                          margin: "0 0 0 10px",
+                          color: "#222",
+                          borderRadius: "5px",
+                        }}
+                      >
+                        DRAFT
+                      </div>
+                    )}
+                  </div>
                   <button
                     className={`btn btn-sm border-0 py-0 px-1 ms-1 rounded-circle ${
                       jp === jpath
