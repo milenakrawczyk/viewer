@@ -371,6 +371,7 @@ export default function EditorPage(props) {
 
   const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
   const jpath = JSON.stringify(path);
+
   const createOpenDraftButton = (
     <button
       className="btn btn-primary"
@@ -385,9 +386,10 @@ export default function EditorPage(props) {
   const saveLocallyButton = (
     <button
       className="btn btn-success"
-      // disabled={!widgetName}
-      // onClick={(e) => {
-      // }}
+      // TODO: this button should
+      //  - take the whole widget object from local storage
+      //  - made changes to Main version or Draft (isDraft)
+      //  - save the whole widget object in local storage
     >
       Save {isDraft ? "Draft" : "Widget"} in Local Storage
     </button>
