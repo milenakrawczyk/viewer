@@ -387,12 +387,12 @@ export default function EditorPage(props) {
 
   const saveLocallyButton = (
     <button
-      className="btn btn-primary"
+      className="btn btn-success"
       // disabled={!widgetName}
       // onClick={(e) => {
       // }}
     >
-      Save in Local Storage
+      Save {isDraft ? "Draft" : "Widget"} in Local Storage
     </button>
   );
 
