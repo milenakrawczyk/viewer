@@ -506,23 +506,11 @@ export default function EditorPage(props) {
 
             return (
               <Nav.Item key={jp}>
-                <Nav.Link
-                  className="text-decoration-none"
-                  style={{ display: "flex" }}
-                  eventKey={jp}
-                >
-                  <div style={{ display: "flex" }}>
+                <Nav.Link className="text-decoration-none d-flex" eventKey={jp}>
+                  <div className="d-flex">
                     <div>{widgetName}</div>
                     {isDraft && (
-                      <div
-                        style={{
-                          padding: "0 12px",
-                          background: "yellow",
-                          margin: "0 0 0 10px",
-                          color: "#222",
-                          borderRadius: "5px",
-                        }}
-                      >
+                      <div className="bg-warning px-1 ms-1 rounded text-dark">
                         DRAFT
                       </div>
                     )}
