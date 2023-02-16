@@ -381,7 +381,7 @@ export default function EditorPage(props) {
         openDraft(widgetName);
       }}
     >
-      Open a Draft
+      Open a Draft version
     </button>
   );
 
