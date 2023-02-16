@@ -465,7 +465,7 @@ export default function EditorPage(props) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      Open Component in a new tab
+      Open Widget page in new tab
     </a>
   );
 
