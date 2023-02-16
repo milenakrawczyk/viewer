@@ -762,6 +762,12 @@ export default function EditorPage(props) {
             >
               <div className="container">
                 <div className="row">
+                  {tab !== Tab.Widget && (
+                    <div class="d-flex justify-content-end">
+                      {renderPreviewButton}
+                    </div>
+                  )}
+
                   <div className="d-inline-block position-relative overflow-hidden">
                     {renderCode ? (
                       <Widget
@@ -770,7 +776,9 @@ export default function EditorPage(props) {
                         props={parsedWidgetProps}
                       />
                     ) : (
-                      'Click "Render preview" button to render the widget'
+                      <div>
+                        Click "Render preview" button to render the widget
+                      </div>
                     )}
                   </div>
                 </div>
