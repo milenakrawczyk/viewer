@@ -555,6 +555,7 @@ export default function EditorPage(props) {
               </Nav.Item>
             );
           })}
+          <Nav.Item className="ms-auto me-1">{renameButton}</Nav.Item>
           <Nav.Item className="">{openCreateButton}</Nav.Item>
         </Nav>
         {NearConfig.widgets.editorComponentSearch && (
