@@ -368,6 +368,7 @@ export default function EditorPage(props) {
     [setLayout, tab, setTab]
   );
 
+  const widgetName = path?.name.split("/")[0];
   const createOpenDraftButton = (
     <button
       className="btn btn-primary"
