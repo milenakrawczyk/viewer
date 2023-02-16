@@ -365,7 +365,10 @@ export default function EditorPage(props) {
     <button
       className="btn btn-primary"
       disabled={!widgetName}
-      onClick={() => setShowSaveDraftModal(true)}
+      onClick={(e) => {
+        e.preventDefault();
+        setShowSaveDraftModal(true)}
+      }
     >
       Save Draft
     </button>
