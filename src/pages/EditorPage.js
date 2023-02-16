@@ -674,12 +674,24 @@ export default function EditorPage(props) {
                   />
                 </div>
                 <div className="mb-3 d-flex gap-2 flex-wrap">
-                  {renderPreviewButton}
-                  {createOpenDraftButton}
-                  {!path?.unnamed && publishButton}
-                  {saveLocallyButton}
-                  {renameButton}
-                  {path && accountId && openInNewTabButton}
+                  {isDraft ? (
+                    <>
+                      {renderPreviewButton}
+                      {saveDraftButton}
+                      {saveLocallyButton}
+                      {renameButton}
+                      {path && accountId && openInNewTabButton}
+                    </>
+                  ) : (
+                    <>
+                      {renderPreviewButton}
+                      {createOpenDraftButton}
+                      {!path?.unnamed && publishButton}
+                      {saveLocallyButton}
+                      {renameButton}
+                      {path && accountId && openInNewTabButton}
+                    </>
+                  )}
                 </div>
               </div>
               <div className={`${tab === Tab.Props ? "" : "visually-hidden"}`}>
