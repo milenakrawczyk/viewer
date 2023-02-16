@@ -441,6 +441,12 @@ export default function EditorPage(props) {
     </button>
   );
 
+  const openCreateButton = (
+    <button className="btn btn-primary" onClick={() => setShowOpenModal(true)}>
+      Open / Create
+    </button>
+  );
+
   const renameButton = (
     <button
       className={`btn ${path?.unnamed ? "btn-primary" : "btn-secondary"}`}
