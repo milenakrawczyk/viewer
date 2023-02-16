@@ -423,7 +423,7 @@ export default function EditorPage(props) {
         },
       }}
     >
-      Publish Widget
+      Publish Widget on chain
     </CommitButton>
   );
 
