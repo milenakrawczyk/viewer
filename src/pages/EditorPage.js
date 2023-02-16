@@ -377,10 +377,11 @@ export default function EditorPage(props) {
   const createOpenDraftButton = (
     <button
       className="btn btn-primary"
-      // disabled={!widgetName}
-      onClick={(e) => {}}
+      onClick={(e) => {
+        openDraft(widgetName);
+      }}
     >
-      {true ? "Open a Draft" : "Create a Draft"}
+      Open a Draft
     </button>
   );
 
