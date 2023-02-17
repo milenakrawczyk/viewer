@@ -386,10 +386,47 @@ export default function EditorPage(props) {
   const saveLocallyButton = (
     <button
       className="btn btn-success"
-      // TODO: this button should
-      //  - take the whole widget object from local storage
-      //  - made changes to Main version or Draft (isDraft)
-      //  - save the whole widget object in local storage
+      onClick={(e) => {
+        e.preventDefault();
+        const key = `social.near.editor.widget.${accountId}`;
+        let widgetObjStr = localStorage.getItem(key);
+        if (widgetObjStr === null) {
+          const data = isDraft ? {
+            [widgetName]: {
+              branch: {
+                draft: {
+                  "": code
+                }
+              }
+            },
+          } : {
+            [widgetName]: {
+              "": code,
+              metadata,
+            },
+          };
+          localStorage.setItem(key, JSON.stringify(data));
+        } else {
+          let widgetObj = JSON.parse(widgetObjStr);
+          if (isDraft) {
+            widgetObj[widgetName] = {
+              ...widgetObj[widgetName],
+              branch: {
+                draft: {
+                  "": code
+                }
+              }
+            }
+          } else {
+            widgetObj[widgetName] = {
+              ...widgetObj[widgetName],
+              "": code,
+              metadata
+            }
+          }
+          localStorage.setItem(key, JSON.stringify(widgetObj));
+        }
+      }}
     >
       Save {isDraft ? "Draft" : "Widget"} in Local Storage
     </button>
