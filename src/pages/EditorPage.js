@@ -382,7 +382,7 @@ export default function EditorPage(props) {
         openDraft(widgetName);
       }}
     >
-      Open a Draft version
+      Open a Draft Version
     </button>
   );
 
@@ -403,7 +403,7 @@ export default function EditorPage(props) {
         },
       }}
     >
-      Publish draft as main version
+      Publish Draft as Main Version
     </CommitButton>
   );
 
@@ -452,7 +452,7 @@ export default function EditorPage(props) {
         }
       }}
     >
-      Save {isDraft ? "Draft" : "Widget"} in Local Storage
+      Save {isDraft ? "Draft" : "Component"} in Local Storage
     </button>
   );
 
@@ -465,7 +465,7 @@ export default function EditorPage(props) {
         setShowSaveDraftModal(true);
       }}
     >
-      Save Draft on chain
+      Save Draft on Chain
     </button>
   );
 
@@ -483,7 +483,7 @@ export default function EditorPage(props) {
         },
       }}
     >
-      Publish Widget on chain
+      Publish Component on chain
     </CommitButton>
   );
 
@@ -514,7 +514,7 @@ export default function EditorPage(props) {
         setShowRenameModal(true);
       }}
     >
-      Rename {path?.type}
+      Rename Component
     </button>
   );
 
@@ -525,7 +525,7 @@ export default function EditorPage(props) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      Open Widget page in new tab
+      Open Component Page in New Tab
     </a>
   );
 
@@ -725,7 +725,7 @@ export default function EditorPage(props) {
                         setTab(Tab.Widget);
                       }}
                     >
-                      Widget Preview
+                      Component Preview
                     </button>
                   </li>
                 )}
