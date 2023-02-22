@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Widget } from "../components/Widget/Widget";
+import { Widget } from "near-social-vm";
 import { useParams } from "react-router-dom";
-import { useQuery } from "../data/utils";
-import { NearConfig } from "../data/near";
+import { useQuery } from "../hooks/useQuery";
 
 export default function ViewPage(props) {
   const { widgetSrc } = useParams();
   const query = useQuery();
   const [widgetProps, setWidgetProps] = useState({});
 
-  const src = widgetSrc || NearConfig.widgets.default;
+  const src = widgetSrc || props.widgets.default;
   const setWidgetSrc = props.setWidgetSrc;
+  const viewSourceWidget = props.widgets.viewSource;
 
   useEffect(() => {
     setWidgetProps(Object.fromEntries([...query.entries()]));
@@ -19,7 +19,7 @@ export default function ViewPage(props) {
   useEffect(() => {
     setTimeout(() => {
       setWidgetSrc(
-        src === NearConfig.widgets.viewSource && query.get("src")
+        src === viewSourceWidget && query.get("src")
           ? {
               edit: query.get("src"),
               view: null,
@@ -35,12 +35,18 @@ export default function ViewPage(props) {
         },
       });
     }, 1);
-  }, [src, query, setWidgetSrc]);
+  }, [src, query, setWidgetSrc, viewSourceWidget]);
 
   return (
-    <div className="container">
+    <div className="container-xl">
       <div className="row">
-        <div className="d-inline-block position-relative overflow-hidden">
+        <div
+          className="d-inline-block position-relative overflow-hidden"
+          style={{
+            "--body-top-padding": "24px",
+            paddingTop: "var(--body-top-padding)",
+          }}
+        >
           <Widget key={src} src={src} props={widgetProps} />{" "}
         </div>
       </div>

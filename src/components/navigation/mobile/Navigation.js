@@ -7,7 +7,7 @@ import { NotificationWidget } from "../NotificationWidget";
 import { SignInButton } from "../SignInButton";
 
 const StyledNavigation = styled.div`
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -53,7 +53,7 @@ export function Navigation(props) {
       </Link>
       {props.signedIn ? (
         <NotificationWidget
-          notificationButtonSrc={props.NearConfig.widgets.notificationButton}
+          notificationButtonSrc={props.widgets.notificationButton}
         />
       ) : (
         <SignInButton onSignIn={() => props.requestSignIn()} />
