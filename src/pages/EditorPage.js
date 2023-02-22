@@ -14,7 +14,6 @@ import {
 import { Nav, OverlayTrigger, Tooltip } from "react-bootstrap";
 import RenameModal from "../components/Editor/RenameModal";
 import OpenModal from "../components/Editor/OpenModal";
-import { useAccountId } from "../data/account";
 import { SaveDraftModal } from "../components/SaveDraft";
 
 const StorageDomain = {
