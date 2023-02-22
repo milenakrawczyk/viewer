@@ -383,6 +383,27 @@ export default function EditorPage(props) {
     </button>
   );
 
+  const publishDraftAsMainButton = (
+    <CommitButton
+      className="btn btn-danger"
+      disabled={!widgetName}
+      near={near}
+      data={{
+        widget: {
+          [widgetName]: {
+            "": code,
+            metadata,
+            branch: {
+              draft: null
+            }
+          },
+        },
+      }}
+    >
+      Publish draft as main version
+    </CommitButton>
+  );
+
   const saveLocallyButton = (
     <button
       className="btn btn-success"
@@ -724,6 +745,7 @@ export default function EditorPage(props) {
                     <>
                       {saveDraftButton}
                       {saveLocallyButton}
+                      {publishDraftAsMainButton}
                       {path && accountId && openInNewTabButton}
                     </>
                   ) : (
