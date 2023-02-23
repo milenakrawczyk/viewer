@@ -203,7 +203,7 @@ export default function EditorPage(props) {
       const widgetSrc = `${accountId}/widget/${widgetName}/branch/draft`;
 
       const c = () => {
-        const code = cache.socialGet(
+        const draftCode = cache.socialGet(
           near,
           widgetSrc,
           false,
@@ -211,7 +211,7 @@ export default function EditorPage(props) {
           undefined,
           c
         );
-        openFile(toPath(Filetype.Widget, widgetSrc), code || DefaultEditorCode);
+        openFile(toPath(Filetype.Widget, widgetSrc), draftCode || code);
       };
 
       c();
