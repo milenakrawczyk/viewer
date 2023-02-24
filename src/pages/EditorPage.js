@@ -563,6 +563,18 @@ export default function EditorPage(props) {
     </a>
   );
 
+  const forkButton = (
+    <button
+      className="btn btn-success"
+      onClick={() => {
+        const forkName = widgetName + "-fork";
+        openFile(toPath(Filetype.Widget, forkName), code);
+      }}
+    >
+      Fork
+    </button>
+  );
+
   return (
     <div className="container-fluid mt-1">
       <RenameModal
