@@ -69,6 +69,7 @@ export default function EditorPage(props) {
   const [parsedWidgetProps, setParsedWidgetProps] = useState({});
   const [propsError, setPropsError] = useState(null);
   const [metadata, setMetadata] = useState(undefined);
+  const [codeChangesPresent, setCodeChangesPresent] = useState(false);
   const near = useNear();
   const cache = useCache();
   const accountId = useAccountId();
@@ -110,6 +111,25 @@ export default function EditorPage(props) {
     },
     [cache, setCode]
   );
+
+  useEffect(() => {
+    if (isDraft) {
+      const widgetDraftSrc = `${accountId}/widget/${widgetName}/branch/draft`;
+      const computeCodeChangesPresent = () => {
+        const widgetDraftCode = cache.socialGet(
+          near,
+          widgetDraftSrc,
+          false,
+          undefined,
+          undefined,
+          computeCodeChangesPresent
+        );
+        const hasCodeChanged = widgetDraftCode != code;
+        setCodeChangesPresent(hasCodeChanged);
+      };
+      computeCodeChangesPresent();
+    }
+  }, [code]);
 
   useEffect(() => {
     ls.set(WidgetPropsKey, widgetProps);
