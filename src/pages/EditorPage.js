@@ -70,6 +70,8 @@ export default function EditorPage(props) {
   const [propsError, setPropsError] = useState(null);
   const [metadata, setMetadata] = useState(undefined);
   const [codeChangesPresent, setCodeChangesPresent] = useState(false);
+  const [codeOnChain, setCodeOnChain] = useState(null);
+  const [draftOnChain, setDraftOnChain] = useState(null);
   const near = useNear();
   const cache = useCache();
   const accountId = useAccountId();
@@ -114,31 +116,49 @@ export default function EditorPage(props) {
 
   useEffect(() => {
     const widgetSrc = `${accountId}/widget/${widgetName}/**`;
-    const computeCodeChangesPresent = () => {
-    const widgetCode = cache.socialGet(
-      near,
-      widgetSrc,
-      false,
-      undefined,
-      undefined,
-      computeCodeChangesPresent
-    );
-    
-    const mainPresent = widgetCode && widgetCode[""] != null;
-    const draftPresent =  widgetCode && widgetCode.branch?.draft?.[""] != null;
+    const fetchCodeAndDraftOnChain = () => {
+      const widgetCode = cache.socialGet(
+        near,
+        widgetSrc,
+        false,
+        undefined,
+        undefined,
+        fetchCodeAndDraftOnChain
+      );
 
-    let hasCodeChanged;
-    if (draftPresent) {
-      hasCodeChanged = widgetCode.branch.draft[""] != code;
-    } else if (mainPresent) {
-      hasCodeChanged = widgetCode[""] != code;
-    } else {
-      // no code on chain
-      hasCodeChanged = true;
-    }
-    setCodeChangesPresent(hasCodeChanged);
-  };
-  computeCodeChangesPresent();
+      setCodeOnChain(widgetCode?.[""]);
+      setDraftOnChain(widgetCode?.branch?.draft?.[""]);
+    };
+    fetchCodeAndDraftOnChain();
+  }, [code]);
+
+  useEffect(() => {
+    const widgetSrc = `${accountId}/widget/${widgetName}/**`;
+    const computeCodeChangesPresent = () => {
+      const widgetCode = cache.socialGet(
+        near,
+        widgetSrc,
+        false,
+        undefined,
+        undefined,
+        computeCodeChangesPresent
+      );
+      
+      const mainPresent = widgetCode && widgetCode[""] != null;
+      const draftPresent =  widgetCode && widgetCode.branch?.draft?.[""] != null;
+
+      let hasCodeChanged;
+      if (draftPresent) {
+        hasCodeChanged = widgetCode.branch.draft[""] != code;
+      } else if (mainPresent) {
+        hasCodeChanged = widgetCode[""] != code;
+      } else {
+        // no code on chain
+        hasCodeChanged = true;
+      }
+      setCodeChangesPresent(hasCodeChanged);
+    };
+    computeCodeChangesPresent();
     
   }, [code]);
 
