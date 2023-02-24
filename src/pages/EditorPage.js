@@ -113,22 +113,33 @@ export default function EditorPage(props) {
   );
 
   useEffect(() => {
-    if (isDraft) {
-      const widgetDraftSrc = `${accountId}/widget/${widgetName}/branch/draft`;
-      const computeCodeChangesPresent = () => {
-        const widgetDraftCode = cache.socialGet(
-          near,
-          widgetDraftSrc,
-          false,
-          undefined,
-          undefined,
-          computeCodeChangesPresent
-        );
-        const hasCodeChanged = widgetDraftCode != code;
-        setCodeChangesPresent(hasCodeChanged);
-      };
-      computeCodeChangesPresent();
+    const widgetSrc = `${accountId}/widget/${widgetName}/**`;
+    const computeCodeChangesPresent = () => {
+    const widgetCode = cache.socialGet(
+      near,
+      widgetSrc,
+      false,
+      undefined,
+      undefined,
+      computeCodeChangesPresent
+    );
+    
+    const mainPresent = widgetCode && widgetCode[""] != null;
+    const draftPresent =  widgetCode && widgetCode.branch?.draft?.[""] != null;
+
+    let hasCodeChanged;
+    if (draftPresent) {
+      hasCodeChanged = widgetCode.branch.draft[""] != code;
+    } else if (mainPresent) {
+      hasCodeChanged = widgetCode[""] != code;
+    } else {
+      // no code on chain
+      hasCodeChanged = true;
     }
+    setCodeChangesPresent(hasCodeChanged);
+  };
+  computeCodeChangesPresent();
+    
   }, [code]);
 
   useEffect(() => {
