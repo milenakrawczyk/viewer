@@ -133,34 +133,17 @@ export default function EditorPage(props) {
   }, [code]);
 
   useEffect(() => {
-    const widgetSrc = `${accountId}/widget/${widgetName}/**`;
-    const computeCodeChangesPresent = () => {
-      const widgetCode = cache.socialGet(
-        near,
-        widgetSrc,
-        false,
-        undefined,
-        undefined,
-        computeCodeChangesPresent
-      );
-      
-      const mainPresent = widgetCode && widgetCode[""] != null;
-      const draftPresent =  widgetCode && widgetCode.branch?.draft?.[""] != null;
-
-      let hasCodeChanged;
-      if (draftPresent) {
-        hasCodeChanged = widgetCode.branch.draft[""] != code;
-      } else if (mainPresent) {
-        hasCodeChanged = widgetCode[""] != code;
-      } else {
-        // no code on chain
-        hasCodeChanged = true;
-      }
-      setCodeChangesPresent(hasCodeChanged);
-    };
-    computeCodeChangesPresent();
-    
-  }, [code]);
+    let hasCodeChanged;
+    if (draftOnChain) {
+      hasCodeChanged = draftOnChain != code;
+    } else if (codeOnChain) {
+      hasCodeChanged = codeOnChain != code;
+    } else {
+      // no code on chain
+      hasCodeChanged = true;
+    }
+    setCodeChangesPresent(hasCodeChanged);
+  }, [code, codeOnChain, draftOnChain]);
 
   useEffect(() => {
     ls.set(WidgetPropsKey, widgetProps);
