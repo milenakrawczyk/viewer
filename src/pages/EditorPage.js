@@ -197,7 +197,7 @@ export default function EditorPage(props) {
 
   useEffect(() => {
     if (files) {
-      files.forEach(f => {
+      files.forEach((f) => {
         const widgetSrc = `${accountId}/widget/${f.name}/**`;
         const fetchCodeAndDraftOnChain = () => {
           const widgetCode = cache.socialGet(
@@ -211,27 +211,32 @@ export default function EditorPage(props) {
 
           const mainCode = widgetCode?.[""];
           const draft = widgetCode?.branch?.draft?.[""];
-          const isDraft = (!draft && !mainCode) || draft;  
+          const isDraft = (!draft && !mainCode) || draft;
           const path = f;
 
           cache
-          .asyncLocalStorageGet(StorageDomain, {
-            path,
-            type: StorageType.Code,
-          })
-          .then(({ code }) => {
-            let hasCodeChanged;
-            if (draft) {
-              hasCodeChanged = draft != code;
-            } else if (mainCode) {
-              hasCodeChanged = mainCode != code;
-            } else {
-              // no code on chain
-              hasCodeChanged = true;
-            }
-            setFilesDetails(filesDetails.set(f.name, {codeChangesPresent: hasCodeChanged, isDraft}));
-          })
-        }
+            .asyncLocalStorageGet(StorageDomain, {
+              path,
+              type: StorageType.Code,
+            })
+            .then(({ code }) => {
+              let hasCodeChanged;
+              if (draft) {
+                hasCodeChanged = draft != code;
+              } else if (mainCode) {
+                hasCodeChanged = mainCode != code;
+              } else {
+                // no code on chain
+                hasCodeChanged = true;
+              }
+              setFilesDetails(
+                filesDetails.set(f.name, {
+                  codeChangesPresent: hasCodeChanged,
+                  isDraft,
+                })
+              );
+            });
+        };
         fetchCodeAndDraftOnChain();
       });
     }
@@ -365,7 +370,7 @@ export default function EditorPage(props) {
           c
         );
         if (code) {
-          const name = widgetSrc.split("/").slice(2).join("/");
+          // const name = widgetSrc.split("/").slice(2).join("/");
           openFile(toPath(Filetype.Widget, widgetSrc), code);
         }
       };
@@ -495,9 +500,9 @@ export default function EditorPage(props) {
     [setLayout, tab, setTab]
   );
 
-  const widgetName = path?.name.split("/")[0];
+  const widgetName = path?.name?.split("/")[0];
   const widgetPathName = path?.name;
-  const isDraft = path?.name.split("/")[2] === "draft";
+  // const isDraft = path?.name?.split("/")[2] === "draft";
 
   const widgetPath = `${accountId}/${path?.type}/${path?.name}`;
   const jpath = JSON.stringify(path);
@@ -515,7 +520,7 @@ export default function EditorPage(props) {
 
   const publishDraftAsMainButton = (
     <CommitButton
-      className="btn btn-danger"
+      className={`btn btn-primary`}
       disabled={!widgetName}
       near={near}
       data={{
@@ -530,59 +535,8 @@ export default function EditorPage(props) {
         },
       }}
     >
-      Publish Draft as Main Version
+      Publish
     </CommitButton>
-  );
-
-  const saveLocallyButton = (
-    <button
-      className="btn btn-success"
-      onClick={(e) => {
-        e.preventDefault();
-        const key = `social.near.editor.widget.${accountId}`;
-        let widgetObjStr = localStorage.getItem(key);
-        if (widgetObjStr === null) {
-          const data = isDraft
-            ? {
-                [widgetName]: {
-                  branch: {
-                    draft: {
-                      "": code,
-                    },
-                  },
-                },
-              }
-            : {
-                [widgetName]: {
-                  "": code,
-                  metadata,
-                },
-              };
-          localStorage.setItem(key, JSON.stringify(data));
-        } else {
-          let widgetObj = JSON.parse(widgetObjStr);
-          if (isDraft) {
-            widgetObj[widgetName] = {
-              ...widgetObj[widgetName],
-              branch: {
-                draft: {
-                  "": code,
-                },
-              },
-            };
-          } else {
-            widgetObj[widgetName] = {
-              ...widgetObj[widgetName],
-              "": code,
-              metadata,
-            };
-          }
-          localStorage.setItem(key, JSON.stringify(widgetObj));
-        }
-      }}
-    >
-      Save {isDraft ? "Draft" : "Component"} in Local Storage
-    </button>
   );
 
   const saveDraftButton = (
@@ -642,7 +596,7 @@ export default function EditorPage(props) {
         marginTop: "0",
       }}
     >
-      <i class="bi bi-plus"></i>
+      <i className="bi bi-plus"></i>
     </button>
   );
 
@@ -654,7 +608,7 @@ export default function EditorPage(props) {
         setShowRenameModal(true);
       }}
     >
-      <i class="bi bi-pen"></i>
+      <i className="bi bi-pen"></i>
     </button>
   );
 
@@ -735,51 +689,47 @@ export default function EditorPage(props) {
             >
               {files?.map((p, idx) => {
                 const jp = JSON.stringify(p);
-                const widgetName = p.name.split("/")[0];
-                const isDraft = (!draftOnChain && !codeOnChain) || draftOnChain;
+                const widgetName = p?.name?.split("/")[0];
+                const { codeChangesPresent, isDraft } =
+                  filesDetails.get(widgetName) || {};
 
                 return (
-                  <>
-                    <Nav.Item key={jp}>
-                      <TopMenu>
-                        <Nav.Link
-                          className="text-decoration-none d-flex "
-                          eventKey={jp}
-                        >
-                          <div className="d-flex">
-                            {jp === jpath && isDraft && (
-                              <div className="draft">Draft</div>
-                            )}
-                            <div>{widgetName}</div>
-                            {jp === jpath && codeChangesPresent && (
-                              <div className="dot"></div>
-                            )}
-                          </div>
-                          <button
-                            className={`close btn btn-lg border-0 py-0 px-1 ms-1 rounded-circle btn-outline-secondary`}
-                            style={{
-                              marginTop: "-3px",
-                              marginBottom: "0px",
-                            }}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              removeFromFiles(p);
-                              if (jp === jpath) {
-                                if (files.length > 1) {
-                                  openFile(files[idx - 1] || files[idx + 1]);
-                                } else {
-                                  createFile(Filetype.Widget);
-                                }
+                  <Nav.Item key={jp}>
+                    <TopMenu>
+                      <Nav.Link
+                        className="text-decoration-none d-flex "
+                        eventKey={jp}
+                      >
+                        <div className="d-flex">
+                          {/* X1 */}
+                          {isDraft && <div className="draft">Draft</div>}
+                          <div>{widgetName}</div>
+                          {codeChangesPresent && <div className="dot"></div>}
+                        </div>
+                        <button
+                          className={`close btn btn-lg border-0 py-0 px-1 ms-1 rounded-circle btn-outline-secondary`}
+                          style={{
+                            marginTop: "-3px",
+                            marginBottom: "0px",
+                          }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            removeFromFiles(p);
+                            if (jp === jpath) {
+                              if (files.length > 1) {
+                                openFile(files[idx - 1] || files[idx + 1]);
+                              } else {
+                                createFile(Filetype.Widget);
                               }
-                            }}
-                          >
-                            <i className="bi bi-x"></i>
-                          </button>
-                        </Nav.Link>
-                      </TopMenu>
-                    </Nav.Item>
-                  </>
+                            }
+                          }}
+                        >
+                          <i className="bi bi-x"></i>
+                        </button>
+                      </Nav.Link>
+                    </TopMenu>
+                  </Nav.Item>
                 );
               })}
               <Nav.Item className="me-1">
@@ -800,7 +750,10 @@ export default function EditorPage(props) {
               <Nav.Item className="">
                 {saveDraftButton}
                 {forkButton}
-                {!path?.unnamed && publishButton}
+
+                {filesDetails.get(widgetName)?.isDraft
+                  ? !path?.unnamed && publishDraftAsMainButton
+                  : !path?.unnamed && publishButton}
               </Nav.Item>
             </Nav>
           </div>
@@ -1046,7 +999,7 @@ export default function EditorPage(props) {
                     {tab === Tab.Widget || (
                       <>
                         {renderCode && (
-                          <div class="d-flex justify-content-end me-2">
+                          <div className="d-flex justify-content-end me-2">
                             {renderPreviewButton}
                           </div>
                         )}
