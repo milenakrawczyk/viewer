@@ -195,52 +195,126 @@ export default function EditorPage(props) {
     setCodeChangesPresent(hasCodeChanged);
   }, [code, codeOnChain, draftOnChain]);
 
+  const checkDrafts = () => {
+    files.forEach((f) => {
+      const widgetSrc = `${accountId}/widget/${f.name}/**`;
+      const fetchCodeAndDraftOnChain = () => {
+        const widgetCode = cache.socialGet(
+          near,
+          widgetSrc,
+          false,
+          undefined,
+          undefined,
+          fetchCodeAndDraftOnChain
+        );
+
+        const mainCode = widgetCode?.[""];
+        const draft = widgetCode?.branch?.draft?.[""];
+        const isDraft = (!draft && !mainCode) || draft;
+        const path = f;
+
+        setFilesDetails(
+          filesDetails.set(f.name, {
+            codeChangesPresent: filesDetails.get(f.name)?.codeChangesPresent,
+            isDraft,
+          })
+        );
+      };
+      fetchCodeAndDraftOnChain();
+    });
+  };
+
+  const checkHasCodeChange = () => {
+    files.forEach((f) => {
+      const widgetSrc = `${accountId}/widget/${f.name}/**`;
+      const fetchCodeAndDraftOnChain = () => {
+        const widgetCode = cache.socialGet(
+          near,
+          widgetSrc,
+          false,
+          undefined,
+          undefined,
+          fetchCodeAndDraftOnChain
+        );
+
+        const mainCode = widgetCode?.[""];
+
+        const draft = widgetCode?.branch?.draft?.[""];
+        const path = f;
+
+        cache
+          .asyncLocalStorageGet(StorageDomain, {
+            path,
+            type: StorageType.Code,
+          })
+          .then(({ code }) => {
+            let hasCodeChanged;
+            if (draft) {
+              hasCodeChanged = draft != code;
+            } else if (mainCode) {
+              hasCodeChanged = mainCode != code;
+            } else {
+              // no code on chain
+              hasCodeChanged = true;
+            }
+            setFilesDetails(
+              filesDetails.set(f.name, {
+                codeChangesPresent: hasCodeChanged,
+                isDraft: filesDetails.get(f.name)?.isDraft,
+              })
+            );
+          });
+      };
+      fetchCodeAndDraftOnChain();
+    });
+  };
+
+  const checkHasCodeChangeSingleFile = (code) => {
+    console.log("Z2");
+    const widgetSrc = `${accountId}/widget/${widgetName}/**`;
+    const fetchCodeAndDraftOnChain = () => {
+      const widgetCode = cache.socialGet(
+        near,
+        widgetSrc,
+        false,
+        undefined,
+        undefined,
+        fetchCodeAndDraftOnChain
+      );
+
+      const mainCode = widgetCode?.[""];
+      const draft = widgetCode?.branch?.draft?.[""];
+      let hasCodeChanged;
+      if (draft) {
+        hasCodeChanged = draft != code;
+      } else if (mainCode) {
+        hasCodeChanged = mainCode != code;
+      } else {
+        // no code on chain
+        hasCodeChanged = true;
+      }
+      setFilesDetails(
+        filesDetails.set(widgetName, {
+          codeChangesPresent: hasCodeChanged,
+          isDraft: filesDetails.get(widgetName)?.isDraft,
+        })
+      );
+    };
+    fetchCodeAndDraftOnChain();
+  };
+
   useEffect(() => {
-    if (files) {
-      files.forEach((f) => {
-        const widgetSrc = `${accountId}/widget/${f.name}/**`;
-        const fetchCodeAndDraftOnChain = () => {
-          const widgetCode = cache.socialGet(
-            near,
-            widgetSrc,
-            false,
-            undefined,
-            undefined,
-            fetchCodeAndDraftOnChain
-          );
-
-          const mainCode = widgetCode?.[""];
-          const draft = widgetCode?.branch?.draft?.[""];
-          const isDraft = (!draft && !mainCode) || draft;
-          const path = f;
-
-          cache
-            .asyncLocalStorageGet(StorageDomain, {
-              path,
-              type: StorageType.Code,
-            })
-            .then(({ code }) => {
-              let hasCodeChanged;
-              if (draft) {
-                hasCodeChanged = draft != code;
-              } else if (mainCode) {
-                hasCodeChanged = mainCode != code;
-              } else {
-                // no code on chain
-                hasCodeChanged = true;
-              }
-              setFilesDetails(
-                filesDetails.set(f.name, {
-                  codeChangesPresent: hasCodeChanged,
-                  isDraft,
-                })
-              );
-            });
-        };
-        fetchCodeAndDraftOnChain();
-      });
+    if (!files) {
+      return;
     }
-  }, [code, files]);
+
+    checkDrafts();
+    checkHasCodeChange();
+  }, [files]);
+
+  useEffect(() => {
+    checkHasCodeChangeSingleFile(code);
+  }, [code]);
 
   useEffect(() => {
     ls.set(WidgetPropsKey, widgetProps);
